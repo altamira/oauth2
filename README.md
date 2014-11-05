@@ -1,5 +1,8 @@
-<<<<<<< HEAD
-security-oauth2: Assortment of technologies including Arquillian
+OAuth2 Server Autentication 
+===========================
+Assortment of technologies including Arquillian
+
+
 ========================
 Author: Pete Muir
 Level: Intermediate
@@ -97,9 +100,4 @@ If you want to debug the source code or look at the Javadocs of any library in t
 
     mvn dependency:sources
     mvn dependency:resolve -Dclassifier=javadoc
-=======
-oauth2
-======
 
-OAuth2 Server Autentication
->>>>>>> cd7e1283ad6c98acb06d3f58e6f76dc387ab9d1e
