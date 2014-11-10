@@ -3,13 +3,18 @@ package br.com.altamira.security.oauth2.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Size;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
@@ -23,60 +28,42 @@ import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import br.com.altamira.security.oauth2.controller.UserController;
+import br.com.altamira.security.oauth2.model.User;
 import br.com.altamira.security.oauth2.util.Database;
 
 /**
-*
-* @author 
-*/
+ *
+ * @author 
+ */
 @Path("/authz")
-public class AuthzEndpoint {
-	@Inject
-    private Database database;
+public class AuthzEndpoint extends BaseEndpoint<User> {
+	
+	@EJB
+    private UserController userController;
 
-    @GET
-    public Response authorize(@Context HttpServletRequest request)
-            throws URISyntaxException, OAuthSystemException {
-        try {
-            OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
-            OAuthIssuerImpl oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-
-            //build response according to response_type
-            String responseType = oauthRequest.getParam(OAuth.OAUTH_RESPONSE_TYPE);
-
-            OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
-                    OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
-
-            if (responseType.equals(ResponseType.CODE.toString())) {
-                final String authorizationCode = oauthIssuerImpl.authorizationCode();
-                database.addAuthCode(authorizationCode);
-                builder.setCode(authorizationCode);
-            }
-            if (responseType.equals(ResponseType.TOKEN.toString())) {
-                final String accessToken = oauthIssuerImpl.accessToken();
-                database.addToken(accessToken);
-
-                builder.setAccessToken(accessToken);
-                builder.setExpiresIn(3600l);
-            }
-
-            String redirectURI = oauthRequest.getParam(OAuth.OAUTH_REDIRECT_URI);
-            final OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
-            URI url = new URI(response.getLocationUri());
-            return Response.status(response.getResponseStatus()).location(url).build();
-        } catch (OAuthProblemException e) {
-            final Response.ResponseBuilder responseBuilder = Response.status(HttpServletResponse.SC_FOUND);
-            String redirectUri = e.getRedirectUri();
-
-            if (OAuthUtils.isEmpty(redirectUri)) {
-                throw new WebApplicationException(
-                        responseBuilder.entity("OAuth callback url needs to be provided by client!!!").build());
-            }
-            final OAuthResponse response =
-                    OAuthASResponse.errorResponse(HttpServletResponse.SC_FOUND)
-                    .error(e).location(redirectUri).buildQueryMessage();
-            final URI location = new URI(response.getLocationUri());
-            return responseBuilder.location(location).build();
-        }
+    /**
+     *
+     */
+    public AuthzEndpoint() {
+    	this.type = AuthzEndpoint.class;
     }
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response authorize(
+			@Context HttpServletRequest request,
+			@Size(min = 2) @QueryParam("username") String userName,
+			@Size(min = 2) @QueryParam("password") String password)
+					throws URISyntaxException, OAuthSystemException, JsonProcessingException {
+		System.out.println(userName);
+		System.out.println(password);
+		//UserController userController = new UserController();
+		User user = userController.findUserByUsernamePassword(userName, password);
+		System.out.println(user.getName());
+		//OAuthIssuerImpl oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+		return createOkResponse(user).build();
+	}
 }
