@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
+import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
@@ -30,6 +31,7 @@ import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import br.com.altamira.security.oauth2.controller.AccessTokenController;
 import br.com.altamira.security.oauth2.controller.UserController;
 import br.com.altamira.security.oauth2.model.User;
 import br.com.altamira.security.oauth2.util.Database;
@@ -40,6 +42,12 @@ import br.com.altamira.security.oauth2.util.Database;
  */
 @Path("/authz")
 public class AuthzEndpoint extends BaseEndpoint<User> {
+	
+	/**
+	 *
+	 */
+	@Inject
+	protected AccessTokenController accessTokenController;
 	
 	@EJB
     private UserController userController;
@@ -62,8 +70,10 @@ public class AuthzEndpoint extends BaseEndpoint<User> {
 		System.out.println(password);
 		//UserController userController = new UserController();
 		User user = userController.findUserByUsernamePassword(userName, password);
-		System.out.println(user.getName());
-		//OAuthIssuerImpl oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-		return createOkResponse(user).build();
+
+		OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+		final String accessToken = oauthIssuerImpl.accessToken();
+		System.out.println(accessToken);
+		return createOkResponse(accessTokenController.create(user, accessToken)).build();
 	}
 }
