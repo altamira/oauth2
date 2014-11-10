@@ -31,7 +31,7 @@ public class AccessToken extends Resource {
 	@NotNull
 	@Size(min = 3)
 	@Column(name = "ACCESS_TOKEN")
-	private String access_token = "";
+	private String accessToken = "";
 	
 	@NotNull
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -42,13 +42,20 @@ public class AccessToken extends Resource {
     @JoinColumn(name = "USER", referencedColumnName = "ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User user;
+	
+	/**
+    *
+    */
+   public AccessToken() {
+       
+   }
 
-	public String getAccess_token() {
-		return access_token;
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setAccess_token(String access_token) {
-		this.access_token = access_token;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
 	public Date getCreated() {
