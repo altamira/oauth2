@@ -59,10 +59,6 @@ public class UserController extends BaseController<User>{
 
 		Root<User> entity = q.from(User.class);
 
-		q.select(cb.construct(User.class,
-				entity.get("id"),
-				entity.get("name")));
-
 		q.select(entity).where(cb.and(
 				cb.equal(entity.get("user"), userName),
 				cb.equal(entity.get("password"), password)));

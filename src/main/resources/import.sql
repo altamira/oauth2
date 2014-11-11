@@ -16,4 +16,4 @@
 --
 
 -- You can use this file to load seed data into the database using SQL statements
-INSERT INTO SS_USER (ID, LAST_MODIFIED, NAME, PASSWORD, USER  ) VALUES (1, 1234,  'jyotirmaya dehury', 'mindfire', 'jyotirmayad')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USER  ) VALUES (1, 1234,  'jyotirmaya', 'dehury', 'mindfire', 'jyotirmayad')

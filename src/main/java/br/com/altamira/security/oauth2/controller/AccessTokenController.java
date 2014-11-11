@@ -65,13 +65,15 @@ public class AccessTokenController extends BaseController<AccessToken>{
        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
        CriteriaQuery<AccessToken> q = cb.createQuery(AccessToken.class);
        Root<AccessToken> entity = q.from(AccessToken.class);
+       
+       q.select(cb.construct(AccessToken.class,
+				entity.get("id"),
+				entity.get("accessToken"),
+				entity.get("created"),
+				entity.get("user")));
        q.select(entity).where(cb.equal(entity.get("accessToken"), token));
        AccessToken accessToken = entityManager.createQuery(q).getSingleResult();
        
-    // Lazy load of user
-       if (accessToken.getUser() != null) {
-    	   System.out.println("test");
-       }
        return accessToken;
    }
 }

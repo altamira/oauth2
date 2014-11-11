@@ -55,14 +55,12 @@ public class TokenEndpoint extends BaseEndpoint<User>{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getToken( @NotNull(message = ENTITY_VALIDATION) User entity)
 					throws URISyntaxException, OAuthSystemException, JsonProcessingException {
-		System.out.println(entity.getName());
-		System.out.println(entity.getPassword());
-		//UserController userController = new UserController();
-		User user = userController.findUserByUsernamePassword(entity.getName(), entity.getPassword());
+
+		User user = userController.findUserByUsernamePassword(entity.getUser(), entity.getPassword());
 
 		OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
 		final String accessToken = oauthIssuerImpl.accessToken();
-		System.out.println(accessToken);
+
 		return createOkResponse(accessTokenController.create(user, accessToken)).build();
 	}
 
