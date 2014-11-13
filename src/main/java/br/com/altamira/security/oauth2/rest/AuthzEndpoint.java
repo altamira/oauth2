@@ -54,11 +54,11 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     	// Create a hash map
     	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
     	// Put elements to the map
-    	responseData.put("access_token", accessToken.getAccessToken());
-    	responseData.put("user_name", accessToken.getUser().getUser());
-    	responseData.put("first_name", accessToken.getUser().getFirstName());
-    	responseData.put("last_name", accessToken.getUser().getLastName());
-    	responseData.put("loggedin_since", accessToken.getCreated());
+    	responseData.put("accessToken", accessToken.getAccessToken());
+    	responseData.put("userName", accessToken.getUser().getUser());
+    	responseData.put("firstName", accessToken.getUser().getFirstName());
+    	responseData.put("lastName", accessToken.getUser().getLastName());
+    	responseData.put("loggedinSince", accessToken.getCreated());
     	
     	return createOkResponse(responseData).build();
     }
