@@ -17,3 +17,6 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USER  ) VALUES (1, 1234,  'jyotirmaya', 'dehury', 'mindfire', 'jyotirmayad')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USER  ) VALUES (2, 1234,  'Helio', 'Toda', 'altamira', 'helio.toda')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USER  ) VALUES (3, 1234,  'Roberto', 'Zelli', 'altamira', 'roberto.zelli')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USER  ) VALUES (4, 1234,  'Alessandro', 'Holanda', 'altamira', 'alessandro.holanda')
