@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 */
 @Entity
 @Table(name = "SS_USER")
-
 public class User extends Resource {
 	
 	/**
