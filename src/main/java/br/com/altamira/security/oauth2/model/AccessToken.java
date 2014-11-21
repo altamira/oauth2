@@ -39,7 +39,7 @@ public class AccessToken extends Resource {
 	private Date created = new Date();
 
 	@JsonIgnore
-	@JoinColumn(name = "USER", referencedColumnName = "ID")
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private User user;
 
