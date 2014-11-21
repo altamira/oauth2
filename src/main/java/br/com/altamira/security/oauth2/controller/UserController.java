@@ -1,5 +1,6 @@
 package br.com.altamira.security.oauth2.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -12,7 +13,7 @@ import javax.persistence.criteria.Root;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import javax.validation.constraints.Min;
-
+import javax.validation.constraints.NotNull;
 
 import br.com.altamira.security.oauth2.model.User;
 
@@ -23,6 +24,7 @@ public class UserController extends BaseController<User>{
 	public UserController() {
 		this.type = User.class;
 	}
+
 	/**
 	 *
 	 */
@@ -43,6 +45,36 @@ public class UserController extends BaseController<User>{
 
 	private static final String USERNAME_VALIDATION = "Invalid Username";
 	private static final String PASSWORD_VALIDATION = "Invalid password";
+
+
+	/**
+	 *
+	 * @param startPage
+	 * @param pageSize
+	 * @return
+	 */
+	@Override
+	public List<User> list(
+			@Min(value = 0, message = START_PAGE_VALIDATION) int startPage,
+			@Min(value = 1, message = PAGE_SIZE_VALIDATION) int pageSize)
+					throws ConstraintViolationException, NoResultException {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<User> q = cb.createQuery(type);
+		Root<User> entity = q.from(type);
+
+		q.select(cb.construct(type,
+				entity.get("id"),
+				entity.get("user")));
+
+		q.orderBy(cb.desc(entity.get("lastModified")));
+
+		return entityManager.createQuery(q)
+				.setFirstResult(startPage * pageSize)
+				.setMaxResults(pageSize)
+				.getResultList();
+
+	}
 
 	/**
 	 *
@@ -66,5 +98,57 @@ public class UserController extends BaseController<User>{
 		User user = entityManager.createQuery(q).getSingleResult();
 
 		return user;
+	}
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public User find(
+			@Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
+					throws ConstraintViolationException, NoResultException {
+
+		User user = super.find(id);
+		
+		// Lazy load of tokens
+        user.getAccessTokens().size();
+		return user;
+	}
+
+	/**
+	 *
+	 * @param entity
+	 * @return
+	 */
+	@Override
+	public User create(
+			@NotNull(message = ENTITY_VALIDATION) User entity)
+					throws ConstraintViolationException {
+		
+		// Resolve dependencies
+		entity.getAccessTokens().stream().forEach((r) -> {
+			r.setUser(entity);
+		});
+		return super.create(entity);
+	}
+
+	/**
+	 *
+	 * @param entity
+	 * @return
+	 */
+	@Override
+	public User update(
+			@NotNull(message = ENTITY_VALIDATION) User entity)
+					throws ConstraintViolationException, IllegalArgumentException {
+		
+		// Resolve dependencies
+        entity.getAccessTokens().stream().forEach((r) -> {
+            r.setUser(entity);
+        });
+
+		return super.update(entity);
 	}
 }

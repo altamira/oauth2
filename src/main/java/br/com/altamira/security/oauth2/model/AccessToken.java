@@ -40,7 +40,7 @@ public class AccessToken extends Resource {
 
 	@JsonIgnore
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private User user;
 
 	public String getAccessToken() {

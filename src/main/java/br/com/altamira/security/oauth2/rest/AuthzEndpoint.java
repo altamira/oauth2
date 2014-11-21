@@ -56,8 +56,6 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     	// Put elements to the map
     	responseData.put("accessToken", accessToken.getAccessToken());
     	responseData.put("userName", accessToken.getUser().getUser());
-    	responseData.put("firstName", accessToken.getUser().getFirstName());
-    	responseData.put("lastName", accessToken.getUser().getLastName());
     	responseData.put("loggedinSince", accessToken.getCreated());
     	
     	return createOkResponse(responseData).build();
