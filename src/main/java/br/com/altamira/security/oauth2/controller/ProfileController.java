@@ -15,14 +15,13 @@ import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import br.com.altamira.security.oauth2.model.User;
-
+import br.com.altamira.security.oauth2.model.Profile;
 
 @Stateless
-public class UserController extends BaseController<User>{
+public class ProfileController extends BaseController<Profile> {
 
-	public UserController() {
-		this.type = User.class;
+	public ProfileController() {
+		this.type = Profile.class;
 	}
 
 	/**
@@ -43,9 +42,6 @@ public class UserController extends BaseController<User>{
 	@Inject
 	protected Validator validator;
 
-	private static final String USERNAME_VALIDATION = "Invalid Username";
-	private static final String PASSWORD_VALIDATION = "Invalid password";
-
 
 	/**
 	 *
@@ -54,18 +50,18 @@ public class UserController extends BaseController<User>{
 	 * @return
 	 */
 	@Override
-	public List<User> list(
+	public List<Profile> list(
 			@Min(value = 0, message = START_PAGE_VALIDATION) int startPage,
 			@Min(value = 1, message = PAGE_SIZE_VALIDATION) int pageSize)
 					throws ConstraintViolationException, NoResultException {
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<User> q = cb.createQuery(type);
-		Root<User> entity = q.from(type);
+		CriteriaQuery<Profile> q = cb.createQuery(type);
+		Root<Profile> entity = q.from(type);
 
 		q.select(cb.construct(type,
 				entity.get("id"),
-				entity.get("user")));
+				entity.get("name")));
 
 		q.orderBy(cb.desc(entity.get("lastModified")));
 
@@ -78,44 +74,19 @@ public class UserController extends BaseController<User>{
 
 	/**
 	 *
-	 * @param String
-	 * @param String
-	 * @return
-	 */
-	public User findUserByUsernamePassword(String userName, String password)
-			throws ConstraintViolationException, NoResultException {
-
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-
-		CriteriaQuery<User> q = cb.createQuery(User.class);
-
-		Root<User> entity = q.from(User.class);
-
-		q.select(entity).where(cb.and(
-				cb.equal(entity.get("user"), userName),
-				cb.equal(entity.get("password"), password)));
-
-		User user = entityManager.createQuery(q).getSingleResult();
-
-		return user;
-	}
-
-	/**
-	 *
 	 * @param id
 	 * @return
 	 */
 	@Override
-	public User find(
+	public Profile find(
 			@Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
 					throws ConstraintViolationException, NoResultException {
 
-		User user = super.find(id);
+		Profile profile = super.find(id);
 
 		// Lazy load of tokens
-		user.getAccessTokens().size();
-		user.getProfiles().size();
-		return user;
+		//profile.getAccessTokens().size();
+		return profile;
 	}
 
 	/**
@@ -124,18 +95,11 @@ public class UserController extends BaseController<User>{
 	 * @return
 	 */
 	@Override
-	public User create(
-			@NotNull(message = ENTITY_VALIDATION) User entity)
+	public Profile create(
+			@NotNull(message = ENTITY_VALIDATION) Profile entity)
 					throws ConstraintViolationException {
 
 		// Resolve dependencies
-		entity.getAccessTokens().stream().forEach((r) -> {
-			r.setUser(entity);
-		});
-		
-//		entity.getProfiles().stream().forEach((r) -> {
-//			r.getUsers().add(entity);
-//		});
 		
 		return super.create(entity);
 	}
@@ -146,15 +110,15 @@ public class UserController extends BaseController<User>{
 	 * @return
 	 */
 	@Override
-	public User update(
-			@NotNull(message = ENTITY_VALIDATION) User entity)
+	public Profile update(
+			@NotNull(message = ENTITY_VALIDATION) Profile entity)
 					throws ConstraintViolationException, IllegalArgumentException {
 
 		// Resolve dependencies
-		entity.getAccessTokens().stream().forEach((r) -> {
-			r.setUser(entity);
-		});
+		
 
 		return super.update(entity);
 	}
+
+
 }

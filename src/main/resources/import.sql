@@ -16,7 +16,10 @@
 --
 
 -- You can use this file to load seed data into the database using SQL statements
-INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (1, 1234,  'jyotirmaya', 'dehury', 'mindfire', 'jyotirmayad')
-INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (2, 1234,  'Helio', 'Toda', 'altamira', 'helio.toda')
-INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (3, 1234,  'Roberto', 'Zelli', 'altamira', 'roberto.zelli')
-INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (4, 1234,  'Alessandro', 'Holanda', 'altamira', 'alessandro.holanda')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (11, 1234,  'jyotirmaya', 'dehury', 'mindfire', 'jyotirmayad')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (21, 1234,  'Helio', 'Toda', 'altamira', 'helio.toda')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (31, 1234,  'Roberto', 'Zelli', 'altamira', 'roberto.zelli')
+INSERT INTO SS_USER (ID, LAST_MODIFIED, FIRST_NAME, LAST_NAME, PASSWORD, USERNAME  ) VALUES (41, 1234,  'Alessandro', 'Holanda', 'altamira', 'alessandro.holanda')
+INSERT INTO SS_PROFILE (ID, LAST_MODIFIED, NAME  ) VALUES (55, 1234, 'Admin')
+INSERT INTO SS_PROFILE (ID, LAST_MODIFIED, NAME  ) VALUES (65, 1234, 'Manufacturing')
+INSERT INTO SS_PROFILE (ID, LAST_MODIFIED, NAME  ) VALUES (75, 1234, 'Sales')
