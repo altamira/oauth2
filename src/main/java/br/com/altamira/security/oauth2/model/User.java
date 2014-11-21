@@ -42,6 +42,15 @@ public class User extends Resource {
 	@Column(name = "PASSWORD")
 	private String password = "";
 	
+	@NotNull
+	@Size(min = 1)
+	@Column(name = "FIRST_NAME")
+	private String firstName = "";
+	
+	@NotNull
+	@Size(min = 1)
+	@Column(name = "LAST_NAME")
+	private String lastName = "";
 	
 	@JsonView(JSonViews.EntityView.class)
     @JsonSerialize(using = NullCollectionSerializer.class)
@@ -88,6 +97,22 @@ public class User extends Resource {
 
 	public void setAccessTokens(List<AccessToken> accessTokens) {
 		this.accessTokens = accessTokens;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }
