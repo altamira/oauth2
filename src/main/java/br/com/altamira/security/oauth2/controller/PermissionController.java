@@ -15,13 +15,13 @@ import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import br.com.altamira.security.oauth2.model.Profile;
+import br.com.altamira.security.oauth2.model.Permission;
 
 @Stateless
-public class ProfileController extends BaseController<Profile> {
+public class PermissionController extends BaseController<Permission> {
 
-	public ProfileController() {
-		this.type = Profile.class;
+	public PermissionController() {
+		this.type = Permission.class;
 	}
 
 	/**
@@ -50,18 +50,19 @@ public class ProfileController extends BaseController<Profile> {
 	 * @return
 	 */
 	@Override
-	public List<Profile> list(
+	public List<Permission> list(
 			@Min(value = 0, message = START_PAGE_VALIDATION) int startPage,
 			@Min(value = 1, message = PAGE_SIZE_VALIDATION) int pageSize)
 					throws ConstraintViolationException, NoResultException {
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Profile> q = cb.createQuery(type);
-		Root<Profile> entity = q.from(type);
+		CriteriaQuery<Permission> q = cb.createQuery(type);
+		Root<Permission> entity = q.from(type);
 
 		q.select(cb.construct(type,
 				entity.get("id"),
-				entity.get("name")));
+				entity.get("resourceName"),
+				entity.get("permission")));
 
 		q.orderBy(cb.desc(entity.get("lastModified")));
 
@@ -78,15 +79,13 @@ public class ProfileController extends BaseController<Profile> {
 	 * @return
 	 */
 	@Override
-	public Profile find(
+	public Permission find(
 			@Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
 					throws ConstraintViolationException, NoResultException {
 
-		Profile profile = super.find(id);
-
-		// Lazy load of tokens
-		profile.getUsers().size();
-		return profile;
+		Permission permission = super.find(id);
+		permission.getProfiles().size();
+		return permission;
 	}
 
 	/**
@@ -95,12 +94,12 @@ public class ProfileController extends BaseController<Profile> {
 	 * @return
 	 */
 	@Override
-	public Profile create(
-			@NotNull(message = ENTITY_VALIDATION) Profile entity)
+	public Permission create(
+			@NotNull(message = ENTITY_VALIDATION) Permission entity)
 					throws ConstraintViolationException {
 
 		// Resolve dependencies
-		
+
 		return super.create(entity);
 	}
 
@@ -110,15 +109,14 @@ public class ProfileController extends BaseController<Profile> {
 	 * @return
 	 */
 	@Override
-	public Profile update(
-			@NotNull(message = ENTITY_VALIDATION) Profile entity)
+	public Permission update(
+			@NotNull(message = ENTITY_VALIDATION) Permission entity)
 					throws ConstraintViolationException, IllegalArgumentException {
 
 		// Resolve dependencies
-		
+
 
 		return super.update(entity);
 	}
-
 
 }

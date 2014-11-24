@@ -3,13 +3,24 @@ package br.com.altamira.security.oauth2.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import br.com.altamira.security.oauth2.serialize.JSonViews;
+import br.com.altamira.security.oauth2.serialize.NullCollectionSerializer;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 /**
@@ -30,8 +41,16 @@ public class Profile extends Resource {
 	@Column(name = "NAME")
 	private String name = "";
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "profiles")
+	@JsonView(JSonViews.EntityView.class)
+    @JsonSerialize(using = NullCollectionSerializer.class)
+	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY, mappedBy = "profiles")
 	private List<User> users = new ArrayList<User>();
+	
+	@JsonIgnore
+	@JoinColumn(name = "PERMISSION_ID", referencedColumnName = "ID")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	private Permission permission;
+	
 	
 	/**
 	 *
@@ -64,6 +83,14 @@ public class Profile extends Resource {
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+
+	public Permission getPermission() {
+		return permission;
+	}
+
+	public void setPermission(Permission permission) {
+		this.permission = permission;
 	}
 	
 
