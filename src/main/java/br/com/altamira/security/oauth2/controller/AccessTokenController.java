@@ -73,7 +73,8 @@ public class AccessTokenController extends BaseController<AccessToken>{
 				entity.get("user")));
        q.select(entity).where(cb.equal(entity.get("accessToken"), token));
        AccessToken accessToken = entityManager.createQuery(q).getSingleResult();
-       
+       accessToken.getUser().getProfiles().size();
+       accessToken.getUser().getAccessTokens().size();
        return accessToken;
    }
 }
