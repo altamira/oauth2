@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import br.com.altamira.security.oauth2.serialize.JSonViews;
 import br.com.altamira.security.oauth2.serialize.NullCollectionSerializer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -41,7 +42,7 @@ public class Permission extends Resource {
 	@Column(name = "PERMISSION")
 	private String permission = "";
 	
-	@JsonView(JSonViews.EntityView.class)
+	@JsonIgnore
     @JsonSerialize(using = NullCollectionSerializer.class)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "permission", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Profile> profiles = new ArrayList<Profile>();

@@ -84,7 +84,7 @@ public class PermissionController extends BaseController<Permission> {
 					throws ConstraintViolationException, NoResultException {
 
 		Permission permission = super.find(id);
-		permission.getProfiles().size();
+		//permission.getProfiles().size();
 		return permission;
 	}
 

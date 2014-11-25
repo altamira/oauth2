@@ -83,9 +83,10 @@ public class ProfileController extends BaseController<Profile> {
 					throws ConstraintViolationException, NoResultException {
 
 		Profile profile = super.find(id);
-
-		// Lazy load of tokens
-		profile.getUsers().size();
+		if(profile.getPermission() != null) {
+			System.out.println(profile.getPermission().getPermission());
+		}
+		
 		return profile;
 	}
 

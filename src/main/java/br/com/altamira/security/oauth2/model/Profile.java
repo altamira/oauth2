@@ -41,12 +41,12 @@ public class Profile extends Resource {
 	@Column(name = "NAME")
 	private String name = "";
 	
-	@JsonView(JSonViews.EntityView.class)
+	@JsonIgnore
     @JsonSerialize(using = NullCollectionSerializer.class)
-	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY, mappedBy = "profiles")
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "profiles")
 	private List<User> users = new ArrayList<User>();
 	
-	@JsonIgnore
+	@JsonView(JSonViews.EntityView.class)
 	@JoinColumn(name = "PERMISSION_ID", referencedColumnName = "ID")
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	private Permission permission;
