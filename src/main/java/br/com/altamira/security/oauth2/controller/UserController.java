@@ -109,12 +109,22 @@ public class UserController extends BaseController<User>{
 	public User find(
 			@Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
 					throws ConstraintViolationException, NoResultException {
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-		User user = super.find(id);
+		CriteriaQuery<User> q = cb.createQuery(User.class);
 
-		// Lazy load of tokens
-		user.getAccessTokens().size();
-		user.getProfiles().size();
+		Root<User> entity = q.from(User.class);
+
+		q.multiselect(
+				entity.get("id"),
+				entity.get("user"),
+				entity.get("password"),
+				entity.get("firstName"), 
+				entity.get("lastName")).
+					where(cb.equal(entity.get("id"), id));
+
+		User user = entityManager.createQuery(q).getSingleResult();
 		return user;
 	}
 

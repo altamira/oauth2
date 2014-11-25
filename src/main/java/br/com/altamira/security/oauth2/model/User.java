@@ -86,6 +86,22 @@ public class User extends Resource {
 		this.id = id;
 		this.user = user;
 	}
+	
+	/**
+	 *
+	 * @param number
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 */
+	public User(Long id, String user, String password, String firstName, String lastName) {
+		this.password = password;
+		this.user = user;
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
 	public String getUser() {
 		return user;
