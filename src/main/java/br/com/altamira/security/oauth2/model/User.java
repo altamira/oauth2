@@ -37,7 +37,7 @@ public class User extends Resource {
 
 	@NotNull
 	@Size(min = 3)
-	@Column(name = "USERNAME")
+	@Column(name = "USERNAME", unique = true)
 	private String user = "";
 
 	@NotNull
