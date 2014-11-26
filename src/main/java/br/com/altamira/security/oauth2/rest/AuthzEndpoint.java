@@ -50,10 +50,18 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     		@Size(min = 2) @QueryParam("token") String token)
     				throws URISyntaxException, OAuthSystemException, JsonProcessingException {
 
-    	AccessToken accessToken = accessTokenController.findByToken(token);
-    	
-    	// Create a hash map
+    	AccessToken accessToken;
+    	// Create a hash map for response data
     	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
+    	
+    	try {
+    		accessToken = accessTokenController.findByToken(token);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		responseData.put("message", "Invalid Token: " + token);
+    		return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+    	}
+    	
     	// Put elements to the map
     	responseData.put("accessToken", accessToken.getAccessToken());
     	responseData.put("userName", accessToken.getUser().getUser());

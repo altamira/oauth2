@@ -1,10 +1,14 @@
 
 package br.com.altamira.security.oauth2.rest;
 
+import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -17,6 +21,7 @@ import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
@@ -56,12 +61,33 @@ public class TokenEndpoint extends BaseEndpoint<User>{
 	public Response getToken( @NotNull(message = ENTITY_VALIDATION) User entity)
 					throws URISyntaxException, OAuthSystemException, JsonProcessingException {
 
-		User user = userController.findUserByUsernamePassword(entity.getUser(), entity.getPassword());
+		User user;
+		// hash map for response string
+    	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
 
-		OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-		final String accessToken = oauthIssuerImpl.accessToken();
+    	//responseData.put("accessToken", accessToken.getAccessToken());
+    	try {
+    		user = userController.findUserByUsernamePassword(entity.getUser(), entity.getPassword());
+    	} catch (ConstraintViolationException e) {
+    		e.printStackTrace();
+    		responseData.put("message", "Invalid Username or Password");
+    		return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
 
-		return createOkResponse(accessTokenController.create(user, accessToken)).build();
+    	} catch (NoResultException e) {
+    		e.printStackTrace();
+    		responseData.put("message", "Invalid Username or Password");
+    		return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		responseData.put("message", "Invalid Username or Password");
+    		return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+    	}
+
+    	OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+    	final String accessToken = oauthIssuerImpl.accessToken();
+
+    	return createOkResponse(accessTokenController.create(user, accessToken)).build();
 	}
 
 }
