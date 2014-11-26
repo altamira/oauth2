@@ -55,6 +55,11 @@ public class User extends Resource {
 	@Column(name = "LAST_NAME")
 	private String lastName = "";
 	
+	@NotNull
+	@Size(min = 5)
+	@Column(name = "EMAIL")
+	private String email = "";
+	
 	@JsonView(JSonViews.EntityView.class)
     @JsonSerialize(using = NullCollectionSerializer.class)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -133,6 +138,14 @@ public class User extends Resource {
 
 	public void setProfiles(List<Profile> profiles) {
 		this.profiles = profiles;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

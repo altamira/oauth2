@@ -41,7 +41,8 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     public AuthzEndpoint() {
     	this.type = AuthzEndpoint.class;
     }
-
+    
+    @Path("token")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response authorize(
@@ -61,5 +62,18 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     	responseData.put("loggedinSince", accessToken.getCreated());
     	
     	return createOkResponse(responseData).build();
+    }
+    
+    @Path("permission")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response authorizeRights(
+    		@Context HttpServletRequest request,
+    		@Size(min = 2) @QueryParam("token") String token,
+    		@Size(min = 2) @QueryParam("resource") String resource,
+    		@Size(min = 2) @QueryParam("permission") String permission)
+    				throws URISyntaxException, OAuthSystemException, JsonProcessingException {
+
+    	return accessTokenController.checkPermission(token, resource, permission);
     }
 }
