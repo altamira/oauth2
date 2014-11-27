@@ -1,10 +1,18 @@
 package br.com.altamira.security.oauth2.controller;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,6 +24,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import br.com.altamira.security.oauth2.model.User;
+import br.com.altamira.security.oauth2.util.Common;
 
 
 @Stateless
@@ -43,8 +52,7 @@ public class UserController extends BaseController<User>{
 	@Inject
 	protected Validator validator;
 
-	private static final String USERNAME_VALIDATION = "Invalid Username";
-	private static final String PASSWORD_VALIDATION = "Invalid password";
+
 
 
 	/**
@@ -133,10 +141,6 @@ public class UserController extends BaseController<User>{
 			r.setUser(entity);
 		});
 		
-//		entity.getProfiles().stream().forEach((r) -> {
-//			r.getUsers().add(entity);
-//		});
-		
 		return super.create(entity);
 	}
 
@@ -156,5 +160,55 @@ public class UserController extends BaseController<User>{
 		});
 
 		return super.update(entity);
+	}
+
+	public User getUserFromUsername(String userName) throws MessagingException {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<User> q = cb.createQuery(User.class);
+		Root<User> entity = q.from(User.class);
+
+		q.select(entity).where(cb.equal(entity.get("user"), userName));
+		User user = entityManager.createQuery(q).getSingleResult();
+		// Lazy load of tokens
+		user.getAccessTokens().size();
+		user.getProfiles().size();
+		System.out.println(user.getEmail());
+		this.sendForgotPasswordEmail(user.getEmail(), user.getPassword());
+		return user;
+	}
+
+	private void sendForgotPasswordEmail (String toEmail, String password) throws MessagingException{
+
+		String smtpUser = Common.SMTP_USER;
+		String smtpPassword = Common.SMTP_PASSWORD;
+
+		String emailText = "Hey," + "\n\n" +
+				"Your password is: " + password + "\n\n" +
+				"Thanks";
+
+		Properties props = new Properties();
+		props.put("mail.smtp.host", Common.SMTP_HOST);
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", Common.SMTP_AUTH);
+		props.put("mail.smtp.port", Common.SMTP_PORT);
+
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(smtpUser, smtpPassword);
+			}
+		});
+
+
+		Message message = new MimeMessage(session);
+		message.setFrom(new InternetAddress(Common.FROM_EMAIL));
+		message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(toEmail));
+		message.setSubject("Forgot Password Request");
+		message.setText(emailText);
+
+		Transport.send(message);
 	}
 }

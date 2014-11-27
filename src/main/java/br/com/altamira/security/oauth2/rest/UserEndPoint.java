@@ -1,10 +1,14 @@
 package br.com.altamira.security.oauth2.rest;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -131,6 +135,43 @@ public class UserEndPoint extends BaseEndpoint<User> {
 		userController.remove(id);
 
 		return createNoContentResponse().build();
+	}
+	
+	/**
+	 * @param String
+	 * @return Response
+	 * @throws IllegalArgumentException 
+	 * @throws JsonProcessingException 
+	 * @throws ConstraintViolationException 
+	 */
+	@GET
+	@Path("forgot-password/{user}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response forgotPassword ( @PathParam("user") String userName )
+			throws NoResultException, MessagingException, ConstraintViolationException, JsonProcessingException, IllegalArgumentException {
+
+		User user;
+		// Create a hash map for response data
+    	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
+		try {
+			user = userController.getUserFromUsername(userName);
+		} catch (NoResultException e) {
+			responseData.put("message", "Invalid User");
+			return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+
+		} catch (MessagingException e) {
+			responseData.put("message", "Error in sending email");
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+
+		}
+		catch (Exception e) {
+			responseData.put("message", "Invalid User");
+			return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+
+		}
+		responseData.put("message", "Password sent through email.");
+		return createOkResponse(responseData).build();
 	}
 
 

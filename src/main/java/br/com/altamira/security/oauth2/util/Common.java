@@ -18,4 +18,11 @@ public class Common {
     public static final String ACCESS_TOKEN_VALID = "access_token_valid";
     public static final String HEADER_AUTHORIZATION = "Authorization";
     public static final String AUTHORIZATION_HEADER_OAUTH2 = "Bearer " + ACCESS_TOKEN_VALID;
+    
+    public static final String SMTP_USER = "altamira.test.email";
+    public static final String SMTP_PASSWORD = "altamira2014";
+    public static final String SMTP_HOST = "smtp.gmail.com";
+    public static final String SMTP_AUTH = "true";
+    public static final String SMTP_PORT = "465";
+    public static final String FROM_EMAIL = "altamira.test.email";
 }
