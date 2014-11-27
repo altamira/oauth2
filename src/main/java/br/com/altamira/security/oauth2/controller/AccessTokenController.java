@@ -112,7 +112,7 @@ public class AccessTokenController extends BaseController<AccessToken>{
 		   if ( p.getPermission().getResourceName().equals(resource) ) {
 			   if (p.getPermission().getPermission().contains(permission) ) {
 				   responseData.put("message", "Authorized");
-				   return Response.status(Response.Status.ACCEPTED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+				   return Response.status(Response.Status.OK).entity(responseData).type(MediaType.APPLICATION_JSON).build();
 			   }
 		   }
 	   }
