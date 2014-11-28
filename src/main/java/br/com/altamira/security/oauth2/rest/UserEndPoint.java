@@ -145,17 +145,17 @@ public class UserEndPoint extends BaseEndpoint<User> {
 	 * @throws ConstraintViolationException 
 	 */
 	@GET
-	@Path("forgot-password/{user}")
+	@Path("/{id:[0-9]*}/forgot-password/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response forgotPassword ( @PathParam("user") String userName )
+	public Response forgotPassword ( @PathParam("id") long userId )
 			throws NoResultException, MessagingException, ConstraintViolationException, JsonProcessingException, IllegalArgumentException {
 
 		User user;
 		// Create a hash map for response data
     	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
 		try {
-			user = userController.getUserFromUsername(userName);
+			user = userController.forgotPasswordRequest(userId);
 		} catch (NoResultException e) {
 			responseData.put("message", "Invalid User");
 			return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();

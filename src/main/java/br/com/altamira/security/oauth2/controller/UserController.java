@@ -162,14 +162,9 @@ public class UserController extends BaseController<User>{
 		return super.update(entity);
 	}
 
-	public User getUserFromUsername(String userName) throws MessagingException {
+	public User forgotPasswordRequest(long id) throws MessagingException {
 
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<User> q = cb.createQuery(User.class);
-		Root<User> entity = q.from(User.class);
-
-		q.select(entity).where(cb.equal(entity.get("user"), userName));
-		User user = entityManager.createQuery(q).getSingleResult();
+		User user = this.find(id);
 		// Lazy load of tokens
 		user.getAccessTokens().size();
 		user.getProfiles().size();
