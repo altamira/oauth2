@@ -12,11 +12,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import br.com.altamira.security.oauth2.serialize.JSonViews;
 import br.com.altamira.security.oauth2.serialize.NullCollectionSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -47,17 +45,18 @@ public class Permission extends Resource {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "permission", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Profile> profiles = new ArrayList<Profile>();
 
-	public Permission(){
+    public Permission() {
 
 	}
 
-	public Permission(Long id, String resourceName, String permission){
+    public Permission(Long id, String resourceName, String permission) {
 		
 		this.id = id;
 		this.resourceName = resourceName;
 		this.permission = permission;
 
 	}
+
 	public String getResourceName() {
 		return resourceName;
 	}

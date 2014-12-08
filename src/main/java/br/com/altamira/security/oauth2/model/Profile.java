@@ -22,76 +22,73 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-
 /**
  *
- * @author 
+ * @author
  */
 @Entity
 @Table(name = "SS_PROFILE")
 public class Profile extends Resource {
-	
-	/**
-	 * Serial number ID
-	 */
-	private static final long serialVersionUID = -3725014293364656727L;
 
-	@NotNull
-	@Size(max = 50)
-	@Column(name = "NAME")
-	private String name = "";
-	
-	@JsonIgnore
+    /**
+     * Serial number ID
+     */
+    private static final long serialVersionUID = -3725014293364656727L;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "NAME")
+    private String name = "";
+
+    @JsonIgnore
     @JsonSerialize(using = NullCollectionSerializer.class)
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "profiles")
-	private List<User> users = new ArrayList<User>();
-	
-	@JsonView(JSonViews.EntityView.class)
-	@JoinColumn(name = "PERMISSION_ID", referencedColumnName = "ID")
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	private Permission permission;
-	
-	
-	/**
-	 *
-	 */
-	public Profile() {
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profiles")
+    private List<User> users = new ArrayList<>();
 
-	}
+    @JsonView(JSonViews.EntityView.class)
+    @JoinColumn(name = "PERMISSION_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    private Permission permission;
 
-	/**
-	 *
-	 * @param number
-	 * @param customer
-	 */
-	public Profile(Long id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+    /**
+     *
+     */
+    public Profile() {
 
-	public String getName() {
-		return name;
-	}
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     *
+     * @param number
+     * @param customer
+     */
+    public Profile(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	public List<User> getUsers() {
-		return users;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Permission getPermission() {
-		return permission;
-	}
+    public List<User> getUsers() {
+        return users;
+    }
 
-	public void setPermission(Permission permission) {
-		this.permission = permission;
-	}
-	
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
+    }
 
 }

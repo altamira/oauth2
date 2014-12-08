@@ -21,131 +21,147 @@ import br.com.altamira.security.oauth2.serialize.NullCollectionSerializer;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-
 /**
  *
- * @author 
+ * @author
  */
 @Entity
 @Table(name = "SS_USER")
-public class User extends Resource {
+public class User extends br.com.altamira.security.oauth2.model.Entity {
 
-	/**
-	 * Serial number ID
-	 */
-	private static final long serialVersionUID = -3725014293364656727L;
+    /**
+     * Serial number ID
+     */
+    private static final long serialVersionUID = -3725014293364656727L;
 
-	@NotNull
-	@Size(min = 3)
-	@Column(name = "USERNAME", unique = true)
-	private String user = "";
+    @NotNull
+    @Size(min = 3)
+    @Column(name = "USERNAME", unique = true)
+    private String user = "";
 
-	@NotNull
-	@Size(min = 3)
-	@Column(name = "PASSWORD")
-	private String password = "";
-	
-	@NotNull
-	@Size(min = 1)
-	@Column(name = "FIRST_NAME")
-	private String firstName = "";
-	
-	@NotNull
-	@Size(min = 1)
-	@Column(name = "LAST_NAME")
-	private String lastName = "";
-	
-	@NotNull
-	@Size(min = 5)
-	@Column(name = "EMAIL")
-	private String email = "";
-	
-	@JsonView(JSonViews.EntityView.class)
+    @NotNull
+    @Size(min = 3)
+    @Column(name = "PASSWORD")
+    private String password = "";
+
+    @NotNull
+    @Size(min = 1)
+    @Column(name = "FIRST_NAME")
+    private String firstName = "";
+
+    @NotNull
+    @Size(min = 1)
+    @Column(name = "LAST_NAME")
+    private String lastName = "";
+
+    @NotNull
+    @Size(min = 5)
+    @Column(name = "EMAIL")
+    private String email = "";
+
+    @Column(name = "THEME")
+    private String theme = "dark";
+
+    @JsonView(JSonViews.EntityView.class)
     @JsonSerialize(using = NullCollectionSerializer.class)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<AccessToken> accessTokens = new ArrayList<AccessToken>();
-	
-	@JsonView(JSonViews.EntityView.class)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<AccessToken> accessTokens = new ArrayList<>();
+
+    @JsonView(JSonViews.EntityView.class)
     @JsonSerialize(using = NullCollectionSerializer.class)
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "ss_user_profile", joinColumns = { 
-			@JoinColumn(name = "USER_ID", nullable = true, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "PROFILE_ID", 
-					nullable = true, updatable = false) })
-	private List<Profile> profiles = new ArrayList<Profile>();
-	
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "ss_user_profile", joinColumns = {
+        @JoinColumn(name = "USER_ID", nullable = true, updatable = false)},
+            inverseJoinColumns = {
+                @JoinColumn(name = "PROFILE_ID",
+                        nullable = true, updatable = false)})
+    private List<Profile> profiles = new ArrayList<>();
 
-	/**
-	 *
-	 */
-	public User() {
+    /**
+     *
+     */
+    public User() {
 
-	}
+    }
 
-	/**
-	 *
-	 * @param number
-	 * @param customer
-	 */
-	public User(Long id, String user) {
-		this.id = id;
-		this.user = user;
-	}
+    /**
+     *
+     * @param id
+     * @param user
+     */
+    public User(Long id, String user) {
+        this.id = id;
+        this.user = user;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public List<AccessToken> getAccessTokens() {
-		return accessTokens;
-	}
+    public List<AccessToken> getAccessTokens() {
+        return accessTokens;
+    }
 
-	public void setAccessTokens(List<AccessToken> accessTokens) {
-		this.accessTokens = accessTokens;
-	}
+    public void setAccessTokens(List<AccessToken> accessTokens) {
+        this.accessTokens = accessTokens;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public List<Profile> getProfiles() {
-		return profiles;
-	}
+    public List<Profile> getProfiles() {
+        return profiles;
+    }
 
-	public void setProfiles(List<Profile> profiles) {
-		this.profiles = profiles;
-	}
+    public void setProfiles(List<Profile> profiles) {
+        this.profiles = profiles;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the theme
+     */
+    public String getTheme() {
+        return theme;
+    }
+
+    /**
+     * @param theme the theme to set
+     */
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
 
 }

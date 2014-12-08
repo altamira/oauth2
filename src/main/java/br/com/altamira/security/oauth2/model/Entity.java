@@ -27,24 +27,20 @@ public abstract class Entity implements Serializable {
     private static final long serialVersionUID = -73112170881659955L;
 
     // Guarantee unique id for all entities
-
     /**
      *
      */
         @Id
-    @SequenceGenerator(name = "EntitySequence", sequenceName = "ENTITY_SEQUENCE", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EntitySequence")
+    @SequenceGenerator(name = "SystemSequence", sequenceName = "SYSTEM_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SystemSequence")
     @Column(name = "ID")
     protected Long id;
 
+    /*
     @NotNull
     @Column(name = "LAST_MODIFIED")
     private Long lastModified = System.currentTimeMillis();
-    
-    // TODO: store class name from subclass in an ENTITY table
-//    @NotNull
-    @Column(name = "ENTITY_CLASS")
-    private String entityClass;
+    */
 
     /**
      * @return the id
@@ -95,8 +91,8 @@ public abstract class Entity implements Serializable {
         return serialVersionUID;
     }
 
-    @PreUpdate
+    /*@PreUpdate
     void updateModificationTimestamp() {
         lastModified = System.currentTimeMillis();
-    }
+    }*/
 }

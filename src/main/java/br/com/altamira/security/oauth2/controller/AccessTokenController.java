@@ -117,6 +117,6 @@ public class AccessTokenController extends BaseController<AccessToken>{
 		   }
 	   }
 	   responseData.put("message", "Unauthorized resource or permission");
-	   return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+	   return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
    }
 }

@@ -22,7 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "SS_ACCESS_TOKEN")
-public class AccessToken extends Resource {
+public class AccessToken extends br.com.altamira.security.oauth2.model.Entity {
+
 	/**
 	 * Serial number ID
 	 */
@@ -66,6 +67,5 @@ public class AccessToken extends Resource {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 
 }
