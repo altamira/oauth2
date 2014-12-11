@@ -75,7 +75,7 @@ public class UserController extends BaseController<User>{
 				entity.get("id"),
 				entity.get("user")));
 
-		q.orderBy(cb.desc(entity.get("lastModified")));
+		//q.orderBy(cb.desc(entity.get("lastModified")));
 
 		return entityManager.createQuery(q)
 				.setFirstResult(startPage * pageSize)
