@@ -63,11 +63,11 @@ public class TokenEndpoint extends BaseEndpoint<User>{
 
 		User user;
 		// hash map for response string
-    	HashMap<String, Serializable> responseData = new HashMap<String, Serializable>();
+    	HashMap<String, Serializable> responseData = new HashMap<>();
 
     	//responseData.put("accessToken", accessToken.getAccessToken());
     	try {
-    		user = userController.findUserByUsernamePassword(entity.getUser(), entity.getPassword());
+    		user = userController.findByUsernamePassword(entity.getUser(), entity.getPassword());
     	} catch (ConstraintViolationException e) {
     		e.printStackTrace();
     		responseData.put("message", "Invalid Username or Password");

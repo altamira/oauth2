@@ -24,186 +24,291 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import br.com.altamira.security.oauth2.model.User;
+import br.com.altamira.security.oauth2.model.User_;
 import br.com.altamira.security.oauth2.util.Common;
-
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.MimeUtility;
 
 @Stateless
-public class UserController extends BaseController<User>{
+public class UserController extends BaseController<User> {
 
-	public UserController() {
-		this.type = User.class;
-	}
+    public UserController() {
+        this.type = User.class;
+    }
 
-	/**
-	 *
-	 */
-	@Inject
-	protected Logger log;
+    /**
+     *
+     */
+    @Inject
+    protected Logger log;
 
-	/**
-	 *
-	 */
-	@Inject
-	protected EntityManager entityManager;
+    /**
+     *
+     */
+    @Inject
+    protected EntityManager entityManager;
 
-	/**
-	 *
-	 */
-	@Inject
-	protected Validator validator;
+    /**
+     *
+     */
+    @Inject
+    protected Validator validator;
 
+    /**
+     *
+     * @param startPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<User> list(
+            @Min(value = 0, message = START_PAGE_VALIDATION) int startPage,
+            @Min(value = 1, message = PAGE_SIZE_VALIDATION) int pageSize)
+            throws ConstraintViolationException, NoResultException {
 
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> q = cb.createQuery(User.class);
+        Root<User> entity = q.from(User.class);
 
+        q.select(cb.construct(User.class,
+                entity.get(User_.id),
+                entity.get(User_.user)));
 
-	/**
-	 *
-	 * @param startPage
-	 * @param pageSize
-	 * @return
-	 */
-	@Override
-	public List<User> list(
-			@Min(value = 0, message = START_PAGE_VALIDATION) int startPage,
-			@Min(value = 1, message = PAGE_SIZE_VALIDATION) int pageSize)
-					throws ConstraintViolationException, NoResultException {
+        //q.orderBy(cb.desc(entity.get("lastModified")));
+        return entityManager.createQuery(q)
+                .setFirstResult(startPage * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
 
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<User> q = cb.createQuery(type);
-		Root<User> entity = q.from(type);
+    }
 
-		q.select(cb.construct(type,
-				entity.get("id"),
-				entity.get("user")));
+    /**
+     *
+     * @param userName
+     * @param password
+     * @return
+     */
+    public User findByUsernamePassword(String userName, String password)
+            throws ConstraintViolationException, NoResultException {
 
-		//q.orderBy(cb.desc(entity.get("lastModified")));
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-		return entityManager.createQuery(q)
-				.setFirstResult(startPage * pageSize)
-				.setMaxResults(pageSize)
-				.getResultList();
+        CriteriaQuery<User> q = cb.createQuery(User.class);
 
-	}
+        Root<User> entity = q.from(User.class);
 
-	/**
-	 *
-	 * @param String
-	 * @param String
-	 * @return
-	 */
-	public User findUserByUsernamePassword(String userName, String password)
-			throws ConstraintViolationException, NoResultException {
+        q.select(entity).where(cb.and(
+                cb.equal(entity.get(User_.user), userName),
+                cb.equal(entity.get(User_.password), password)));
 
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        User user = entityManager.createQuery(q).getSingleResult();
 
-		CriteriaQuery<User> q = cb.createQuery(User.class);
+        return user;
+    }
 
-		Root<User> entity = q.from(User.class);
+    /**
+     *
+     * @param userName
+     * @return
+     */
+    public User findByUsername(String userName)
+            throws ConstraintViolationException, NoResultException {
 
-		q.select(entity).where(cb.and(
-				cb.equal(entity.get("user"), userName),
-				cb.equal(entity.get("password"), password)));
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-		User user = entityManager.createQuery(q).getSingleResult();
+        CriteriaQuery<User> q = cb.createQuery(User.class);
 
-		return user;
-	}
+        Root<User> entity = q.from(User.class);
 
-	/**
-	 *
-	 * @param id
-	 * @return
-	 */
-	@Override
-	public User find(
-			@Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
-					throws ConstraintViolationException, NoResultException {
+        q.select(entity).where(cb.equal(entity.get(User_.user), userName));
 
-		User user = super.find(id);
+        User user = entityManager.createQuery(q).getSingleResult();
 
-		// Lazy load of tokens
-		user.getAccessTokens().size();
-		user.getProfiles().size();
-		return user;
-	}
+        return user;
+    }
 
-	/**
-	 *
-	 * @param entity
-	 * @return
-	 */
-	@Override
-	public User create(
-			@NotNull(message = ENTITY_VALIDATION) User entity)
-					throws ConstraintViolationException {
+    /**
+     *
+     * @param email
+     * @return
+     */
+    public User findByEmail(String email)
+            throws ConstraintViolationException, NoResultException {
 
-		// Resolve dependencies
-		entity.getAccessTokens().stream().forEach((r) -> {
-			r.setUser(entity);
-		});
-		
-		return super.create(entity);
-	}
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-	/**
-	 *
-	 * @param entity
-	 * @return
-	 */
-	@Override
-	public User update(
-			@NotNull(message = ENTITY_VALIDATION) User entity)
-					throws ConstraintViolationException, IllegalArgumentException {
+        CriteriaQuery<User> q = cb.createQuery(User.class);
 
-		// Resolve dependencies
-		entity.getAccessTokens().stream().forEach((r) -> {
-			r.setUser(entity);
-		});
+        Root<User> entity = q.from(User.class);
 
-		return super.update(entity);
-	}
+        q.select(entity).where(cb.equal(entity.get(User_.email), email));
 
-	public User forgotPasswordRequest(long id) throws MessagingException {
+        User user = entityManager.createQuery(q).getSingleResult();
 
-		User user = this.find(id);
-		// Lazy load of tokens
-		user.getAccessTokens().size();
-		user.getProfiles().size();
-		System.out.println(user.getEmail());
-		this.sendForgotPasswordEmail(user.getEmail(), user.getPassword());
-		return user;
-	}
+        return user;
+    }
 
-	private void sendForgotPasswordEmail (String toEmail, String password) throws MessagingException{
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public User find(String user)
+            throws ConstraintViolationException, NoResultException {
 
-		String smtpUser = Common.SMTP_USER;
-		String smtpPassword = Common.SMTP_PASSWORD;
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-		String emailText = "Hey," + "\n\n" +
-				"Your password is: " + password + "\n\n" +
-				"Thanks";
+        CriteriaQuery<User> root = cb.createQuery(User.class);
 
-		Properties props = new Properties();
-		props.put("mail.smtp.host", Common.SMTP_HOST);
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.auth", Common.SMTP_AUTH);
-		props.put("mail.smtp.port", Common.SMTP_PORT);
+        Root<User> entity = root.from(User.class);
 
-		Session session = Session.getDefaultInstance(props,
-				new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(smtpUser, smtpPassword);
-			}
-		});
+        root.select(entity).where(cb.or(
+                cb.equal(entity.get(User_.email), user.toLowerCase()),
+                cb.equal(entity.get(User_.user), user.toLowerCase())));
 
+        return entityManager.createQuery(root).getSingleResult();
+    }
 
-		Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(Common.FROM_EMAIL));
-		message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(toEmail));
-		message.setSubject("Forgot Password Request");
-		message.setText(emailText);
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public User find(
+            @Min(value = 1, message = ID_NOT_NULL_VALIDATION) long id)
+            throws ConstraintViolationException, NoResultException {
 
-		Transport.send(message);
-	}
+        User user = super.find(id);
+
+        // Lazy load of tokens
+        user.getAccessTokens().size();
+        user.getProfiles().size();
+        return user;
+    }
+
+    /**
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public User create(
+            @NotNull(message = ENTITY_VALIDATION) User entity)
+            throws ConstraintViolationException {
+
+        // Resolve dependencies
+        entity.getAccessTokens().stream().forEach((r) -> {
+            r.setUser(entity);
+        });
+
+        return super.create(entity);
+    }
+
+    /**
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public User update(
+            @NotNull(message = ENTITY_VALIDATION) User entity)
+            throws ConstraintViolationException, IllegalArgumentException {
+
+        // Resolve dependencies
+        entity.getAccessTokens().stream().forEach((r) -> {
+            r.setUser(entity);
+        });
+
+        return super.update(entity);
+    }
+
+    public User forgotPasswordRequest(Map<String, String> parameters) throws MessagingException {
+        User user;
+
+        if (parameters.containsKey("user") && !parameters.get("user").isEmpty()) {
+            user = this.find(parameters.get("user"));
+        } else if (parameters.containsKey("email") && !parameters.get("email").isEmpty()) {
+            user = this.findByEmail(parameters.get("email"));
+        } else if (parameters.containsKey("username") && !parameters.get("username").isEmpty()) {
+            user = this.findByUsername(parameters.get("username"));
+        } else {
+            throw new IllegalArgumentException("User name or email should be supplied.");
+        }
+
+        // Lazy load of tokens
+        user.getAccessTokens().size();
+        user.getProfiles().size();
+        System.out.println(user.getEmail());
+        this.sendForgotPasswordEmail(user);
+        return user;
+    }
+
+    private void sendForgotPasswordEmail(User user) throws MessagingException {
+
+        String smtpUser = Common.SMTP_USER;
+        String smtpPassword = Common.SMTP_PASSWORD;
+
+        String emailText = "<html><head></head><body>Olá <b>" + user.getFirstName() + "</b>,<br>"
+                + "<p>Em resposta a sua solicitação, segue o reenvio da senha de acesso ao sistema da Altamira:</p>"
+                + "<table>"
+                + "<tr><td>Seu nome de usuário:</td><td><b>" + user.getUser() + "</b></td></tr>"
+                + "<tr><td>Sua senha:</td><td><b>" + user.getPassword() + "</b></td></tr>"
+                + "</table></body></html>";
+
+        // Properties for Amazon SES
+        Properties props = new Properties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.port", 587);
+        props.put("mail.smtp.host", Common.SMTP_HOST);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        //props.put("mail.smtp.starttls.required", "true");
+        //props.put("mail.smtp.socketFactory.port", "587");
+        //props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        //props.put("mail.smtp.ssl.trust", Common.SMTP_HOST);
+        //props.put("mail.smtp.ssl.enable", "true");
+        //props.put("mail.smtp.auth", Common.SMTP_AUTH);
+        //props.put("mail.smtp.auth", "true");
+        //Transport transport = session.getTransport();
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(smtpUser, smtpPassword);
+                    }
+                });
+
+        Transport transport = null;
+
+        try {
+            transport = session.getTransport();
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(Common.FROM_EMAIL));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(user.getEmail()));
+            message.setSubject("Altamira - Reenvio de senha");
+            message.setContent(emailText, "text/html; charset=iso-8859-1");
+
+            transport.connect(Common.SMTP_HOST, Common.SMTP_USER, Common.SMTP_PASSWORD);
+
+            message.saveChanges();
+
+            transport.sendMessage(message, message.getAllRecipients());
+            
+        } finally {
+            if (transport != null) {
+                try {
+                    transport.close();
+                } catch (MessagingException e) {
+                    //throw new EmailException(e);
+                }
+            }
+        }
+    }
+
 }
