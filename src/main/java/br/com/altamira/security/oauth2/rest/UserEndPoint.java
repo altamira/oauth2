@@ -32,6 +32,8 @@ import br.com.altamira.security.oauth2.model.User;
 import java.util.Map;
 import javax.ejb.EJBException;
 import javax.persistence.NoResultException;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.OPTIONS;
 
 /**
  *
@@ -184,4 +186,11 @@ public class UserEndPoint extends BaseEndpoint<User> {
         return createOkResponse(responseData).build();
     }
 
+        
+    @OPTIONS
+    @Path("/forgot-password")
+    public Response corsPreflightForForgotPasswordPath(@HeaderParam("Origin") String origin) {
+        return getCORSHeaders(origin);
+    }
+    
 }

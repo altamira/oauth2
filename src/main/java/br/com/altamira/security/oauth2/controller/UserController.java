@@ -111,6 +111,30 @@ public class UserController extends BaseController<User> {
     /**
      *
      * @param userName
+     * @param password
+     * @return
+     */
+    public User findByEmailPassword(String userName, String password)
+            throws ConstraintViolationException, NoResultException {
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<User> q = cb.createQuery(User.class);
+
+        Root<User> entity = q.from(User.class);
+
+        q.select(entity).where(cb.and(
+                cb.equal(entity.get(User_.email), userName),
+                cb.equal(entity.get(User_.password), password)));
+
+        User user = entityManager.createQuery(q).getSingleResult();
+
+        return user;
+    }
+    
+    /**
+     *
+     * @param userName
      * @return
      */
     public User findByUsername(String userName)

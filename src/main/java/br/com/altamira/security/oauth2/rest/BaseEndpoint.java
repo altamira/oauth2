@@ -96,7 +96,7 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
     protected Class<? extends BaseEndpoint<T>> type;
 
 
-    private Response getCORSHeaders(String origin) {
+    protected Response getCORSHeaders(String origin) {
         return Response
                 .ok()
                 .header("Access-Control-Allow-Origin", origin)
