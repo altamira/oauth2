@@ -26,10 +26,7 @@ import javax.validation.constraints.NotNull;
 import br.com.altamira.security.oauth2.model.User;
 import br.com.altamira.security.oauth2.model.User_;
 import br.com.altamira.security.oauth2.util.Common;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeUtility;
 
 @Stateless
 public class UserController extends BaseController<User> {

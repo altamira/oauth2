@@ -10,13 +10,11 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author 
+ * @author
  */
 @javax.persistence.MappedSuperclass
 public abstract class Entity implements Serializable {
@@ -30,17 +28,11 @@ public abstract class Entity implements Serializable {
     /**
      *
      */
-        @Id
+    @Id
     @SequenceGenerator(name = "SystemSequence", sequenceName = "SYSTEM_SEQUENCE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SystemSequence")
     @Column(name = "ID")
     protected Long id;
-
-    /*
-    @NotNull
-    @Column(name = "LAST_MODIFIED")
-    private Long lastModified = System.currentTimeMillis();
-    */
 
     /**
      * @return the id
@@ -91,8 +83,4 @@ public abstract class Entity implements Serializable {
         return serialVersionUID;
     }
 
-    /*@PreUpdate
-    void updateModificationTimestamp() {
-        lastModified = System.currentTimeMillis();
-    }*/
 }

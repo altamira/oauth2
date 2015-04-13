@@ -7,7 +7,6 @@ import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.mail.MessagingException;
-import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -40,6 +39,7 @@ import javax.ws.rs.OPTIONS;
  *
  * @author
  */
+@Resource(name = "USER")
 @Path("user")
 @RequestScoped
 public class UserEndPoint extends BaseEndpoint<User> {
@@ -186,11 +186,10 @@ public class UserEndPoint extends BaseEndpoint<User> {
         return createOkResponse(responseData).build();
     }
 
-        
     @OPTIONS
     @Path("/forgot-password")
     public Response corsPreflightForForgotPasswordPath(@HeaderParam("Origin") String origin) {
         return getCORSHeaders(origin);
     }
-    
+
 }

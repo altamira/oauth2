@@ -5,15 +5,12 @@
  */
 package br.com.altamira.security.oauth2.rest;
 
-
-
 //import br.com.altamira.security.oauth2.model.Entity;
 //
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.fasterxml.jackson.databind.SerializationFeature;
 //import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-
 import java.lang.reflect.ParameterizedType;
 import java.util.logging.Logger;
 
@@ -95,7 +92,6 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
      */
     protected Class<? extends BaseEndpoint<T>> type;
 
-
     protected Response getCORSHeaders(String origin) {
         return Response
                 .ok()
@@ -115,19 +111,19 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
     public Response corsPreflight(@HeaderParam("Origin") String origin) {
         return getCORSHeaders(origin);
     }
-    
+
     @OPTIONS
     @Path("/{id:[0-9]*}")
     public Response corsPreflightForIdPath(@HeaderParam("Origin") String origin) {
         return getCORSHeaders(origin);
     }
-    
+
     @OPTIONS
     @Path("/search")
     public Response corsPreflightForSearchPath(@HeaderParam("Origin") String origin) {
         return getCORSHeaders(origin);
     }
-    
+
     /**
      *
      * @param origin

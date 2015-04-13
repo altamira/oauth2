@@ -27,110 +27,110 @@ import br.com.altamira.security.oauth2.controller.ProfileController;
 import br.com.altamira.security.oauth2.model.Profile;
 
 /**
-*
-*
-* @author 
-*/
+ *
+ *
+ * @author
+ */
+@Resource(name = "PROFILE")
 @Path("profile")
 @RequestScoped
 public class ProfileEndPoint extends BaseEndpoint<Profile> {
-	
 
-	@EJB
-	private ProfileController profileController;
+    @EJB
+    private ProfileController profileController;
 
-	public ProfileEndPoint() {
-		this.type = ProfileEndPoint.class;
-	}
+    public ProfileEndPoint() {
+        this.type = ProfileEndPoint.class;
+    }
 
-	/**
-	 *
-	 * @param startPosition
-	 * @param maxResult
-	 * @return
-	 * @throws IOException
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response list(
-			@DefaultValue("0") @QueryParam("start") Integer startPosition,
-			@DefaultValue("10") @QueryParam("max") Integer maxResult)
-					throws IOException {
+    /**
+     *
+     * @param startPosition
+     * @param maxResult
+     * @return
+     * @throws IOException
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response list(
+            @DefaultValue("0") @QueryParam("start") Integer startPosition,
+            @DefaultValue("10") @QueryParam("max") Integer maxResult)
+            throws IOException {
 
-		return createOkResponse(
-				profileController.list(startPosition, maxResult)).build();
-	}
+        return createOkResponse(
+                profileController.list(startPosition, maxResult)).build();
+    }
 
-	/**
-	 *
-	 * @param id
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	@GET
-	@Path("/{id:[0-9]*}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response find(
-			@Min(value = 1, message = ID_VALIDATION) @PathParam(value = "id") long id)
-					throws JsonProcessingException, NoResultException {
+    /**
+     *
+     * @param id
+     * @return
+     * @throws JsonProcessingException
+     */
+    @GET
+    @Path("/{id:[0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response find(
+            @Min(value = 1, message = ID_VALIDATION) @PathParam(value = "id") long id)
+            throws JsonProcessingException, NoResultException {
 
-		return createOkResponse(
-				profileController.find(id)).build();
-	}
+        return createOkResponse(
+                profileController.find(id)).build();
+    }
 
-	/**
-	 *
-	 * @param entity
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws UriBuilderException
-	 * @throws JsonProcessingException
-	 */
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(
-			@NotNull(message = ENTITY_VALIDATION) Profile entity)
-					throws IllegalArgumentException, UriBuilderException, JsonProcessingException {
+    /**
+     *
+     * @param entity
+     * @return
+     * @throws IllegalArgumentException
+     * @throws UriBuilderException
+     * @throws JsonProcessingException
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(
+            @NotNull(message = ENTITY_VALIDATION) Profile entity)
+            throws IllegalArgumentException, UriBuilderException, JsonProcessingException {
 
-		return createCreatedResponse(profileController.create(entity)).build();
-	}
+        return createCreatedResponse(profileController.create(entity)).build();
+    }
 
-	/**
-	 *
-	 * @param id
-	 * @param entity
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	@PUT
-	@Path("/{id:[0-9]*}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response update(
-			@Min(value = 1, message = ID_VALIDATION) @PathParam("id") long id,
-			@NotNull(message = ENTITY_VALIDATION) Profile entity)
-					throws JsonProcessingException {
+    /**
+     *
+     * @param id
+     * @param entity
+     * @return
+     * @throws JsonProcessingException
+     */
+    @PUT
+    @Path("/{id:[0-9]*}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(
+            @Min(value = 1, message = ID_VALIDATION) @PathParam("id") long id,
+            @NotNull(message = ENTITY_VALIDATION) Profile entity)
+            throws JsonProcessingException {
 
-		return createOkResponse(
-				profileController.update(entity)).build();
-	}
+        return createOkResponse(
+                profileController.update(entity)).build();
+    }
 
-	/**
-	 *
-	 * @param id
-	 * @return
-	 * @throws com.fasterxml.jackson.core.JsonProcessingException
-	 */
-	@DELETE
-	@Path("/{id:[0-9]*}")
-	public Response delete(
-			@Min(value = 1, message = ID_VALIDATION) @PathParam("id") long id)
-					throws JsonProcessingException {
+    /**
+     *
+     * @param id
+     * @return
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
+     */
+    @DELETE
+    @Path("/{id:[0-9]*}")
+    public Response delete(
+            @Min(value = 1, message = ID_VALIDATION) @PathParam("id") long id)
+            throws JsonProcessingException {
 
-		profileController.remove(id);
+        profileController.remove(id);
 
-		return createNoContentResponse().build();
-	}
+        return createNoContentResponse().build();
+    }
 
 }

@@ -70,7 +70,7 @@ public class User extends br.com.altamira.security.oauth2.model.Entity {
     @JsonView(JSonViews.EntityView.class)
     @JsonSerialize(using = NullCollectionSerializer.class)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "ss_user_profile", joinColumns = {
+    @JoinTable(name = "SS_USER_PROFILE", joinColumns = {
         @JoinColumn(name = "USER_ID", nullable = true, updatable = false)},
             inverseJoinColumns = {
                 @JoinColumn(name = "PROFILE_ID",

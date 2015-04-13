@@ -7,19 +7,16 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import br.com.altamira.security.oauth2.serialize.JSonViews;
 import br.com.altamira.security.oauth2.serialize.NullCollectionSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -27,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @Entity
 @Table(name = "SS_PROFILE")
-public class Profile extends Resource {
+public class Profile extends br.com.altamira.security.oauth2.model.Entity {
 
     /**
      * Serial number ID
@@ -44,10 +41,10 @@ public class Profile extends Resource {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profiles")
     private List<User> users = new ArrayList<>();
 
-    @JsonView(JSonViews.EntityView.class)
-    @JoinColumn(name = "PERMISSION_ID", referencedColumnName = "ID")
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private Permission permission;
+    @JsonIgnore
+    @JsonSerialize(using = NullCollectionSerializer.class)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Permission> permission = new ArrayList<>();
 
     /**
      *
@@ -58,8 +55,8 @@ public class Profile extends Resource {
 
     /**
      *
-     * @param number
-     * @param customer
+     * @param id
+     * @param name
      */
     public Profile(Long id, String name) {
         this.id = id;
@@ -82,11 +79,11 @@ public class Profile extends Resource {
         this.users = users;
     }
 
-    public Permission getPermission() {
+    public List<Permission> getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+    public void setPermission(List<Permission> permission) {
         this.permission = permission;
     }
 

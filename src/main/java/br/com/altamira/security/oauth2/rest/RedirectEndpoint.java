@@ -10,10 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -33,7 +31,7 @@ public class RedirectEndpoint {
     @GET
     public String redirect() {
         JSONObject object = new JSONObject();
-        JSONObject headers = new JSONObject(); 
+        JSONObject headers = new JSONObject();
         JSONObject qp = new JSONObject();
         String json = "error!";
         try {

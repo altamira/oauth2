@@ -29,6 +29,7 @@ import br.com.altamira.security.oauth2.model.AccessToken;
  *
  * @author
  */
+@Resource(name = "AUTHZ")
 @Path("/authz")
 public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
 
@@ -90,7 +91,7 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
 
         return accessTokenController.checkPermission(token, resource, permission);
     }
-    
+
     //ALTAMIRA-182: Data API - add validation token for each request in RESTful Data API
     @Path("permission")
     @POST
@@ -102,14 +103,13 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
             @Size(min = 2) @QueryParam("permission") String permission,
             @NotNull HashMap<String, String> map)
             throws URISyntaxException, OAuthSystemException, JsonProcessingException {
-    	
-    	String resource = map.get("resource");
-    	
-    	if(resource == null)
-    	{
-    		Response response = Response.status(Response.Status.UNAUTHORIZED).entity("Specify resource name").build();
-    		return response;
-    	}
+
+        String resource = map.get("resource");
+
+        if (resource == null) {
+            Response response = Response.status(Response.Status.UNAUTHORIZED).entity("Specify resource name").build();
+            return response;
+        }
 
         return accessTokenController.checkPermission(token, resource, permission);
     }

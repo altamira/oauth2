@@ -12,6 +12,7 @@
     <class>br.com.altamira.security.oauth2.model.Permission</class>
     <class>br.com.altamira.security.oauth2.model.Profile</class>
     <class>br.com.altamira.security.oauth2.model.User</class>
+    <class>br.com.altamira.security.oauth2.model.Resource</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->

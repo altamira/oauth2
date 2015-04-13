@@ -7,7 +7,6 @@ import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -32,6 +31,7 @@ import br.com.altamira.security.oauth2.model.User;
  *
  *
  */
+@Resource(name = "TOKEN")
 @Path("/token")
 public class TokenEndpoint extends BaseEndpoint<User> {
 
@@ -52,6 +52,7 @@ public class TokenEndpoint extends BaseEndpoint<User> {
     }
 
     @POST
+    @Permission(name = "REQUEST_TOKEN")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(@NotNull(message = ENTITY_VALIDATION) User entity)

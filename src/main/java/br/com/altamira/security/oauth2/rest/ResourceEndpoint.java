@@ -1,6 +1,4 @@
-
 package br.com.altamira.security.oauth2.rest;
-
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +22,6 @@ import org.apache.oltu.oauth2.rs.response.OAuthRSResponse;
 import br.com.altamira.security.oauth2.util.Common;
 import br.com.altamira.security.oauth2.util.Database;
 
-
 /**
  *
  *
@@ -32,6 +29,7 @@ import br.com.altamira.security.oauth2.util.Database;
  */
 @Path("/resource")
 public class ResourceEndpoint {
+
     @Inject
     private Database database;
 
@@ -56,7 +54,7 @@ public class ResourceEndpoint {
                 //return Response.status(Response.Status.UNAUTHORIZED).build();
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .header(OAuth.HeaderType.WWW_AUTHENTICATE,
-                        oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE))
+                                oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE))
                         .build();
 
             }
@@ -76,7 +74,7 @@ public class ResourceEndpoint {
                 // If no error code then return a standard 401 Unauthorized response
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .header(OAuth.HeaderType.WWW_AUTHENTICATE,
-                        oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE))
+                                oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE))
                         .build();
             }
 
