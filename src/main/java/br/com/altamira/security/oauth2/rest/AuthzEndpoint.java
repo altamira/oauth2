@@ -6,8 +6,11 @@ import java.util.HashMap;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -84,6 +87,29 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
             @Size(min = 2) @QueryParam("resource") String resource,
             @Size(min = 2) @QueryParam("permission") String permission)
             throws URISyntaxException, OAuthSystemException, JsonProcessingException {
+
+        return accessTokenController.checkPermission(token, resource, permission);
+    }
+    
+    //ALTAMIRA-182: Data API - add validation token for each request in RESTful Data API
+    @Path("permission")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response authorizeRights(
+            @Context HttpServletRequest request,
+            @Size(min = 2) @QueryParam("token") String token,
+            @Size(min = 2) @QueryParam("permission") String permission,
+            @NotNull HashMap<String, String> map)
+            throws URISyntaxException, OAuthSystemException, JsonProcessingException {
+    	
+    	String resource = map.get("resource");
+    	
+    	if(resource == null)
+    	{
+    		Response response = Response.status(Response.Status.UNAUTHORIZED).entity("Specify resource name").build();
+    		return response;
+    	}
 
         return accessTokenController.checkPermission(token, resource, permission);
     }
