@@ -2,8 +2,10 @@ package br.com.altamira.security.oauth2.rest;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import javax.ejb.EJB;
 
 import javax.ws.rs.DELETE;
@@ -113,7 +115,7 @@ public class PermissionInterceptor implements ContainerRequestFilter {
         Response authResponse = accessTokenController.checkPermission(token, resource.toString(), permission);
 
         if (authResponse.getStatus() != 200) {
-            String message = authResponse.readEntity(HashMap.class).get("message").toString();
+            Map<String, Serializable> message = authResponse.readEntity(HashMap.class);
             requestContext.abortWith(Response.status(authResponse.getStatus()).entity(message).build());
         }
 

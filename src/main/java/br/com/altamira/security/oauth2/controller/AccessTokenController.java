@@ -96,7 +96,7 @@ public class AccessTokenController extends BaseController<AccessToken> {
     public Response checkPermission(String token, String resource, String permission)
             throws ConstraintViolationException, NoResultException {
 
-        AccessToken accessToken;
+        AccessToken accessToken = null;
         HashMap<String, Serializable> responseData = new HashMap<>();
 
         try {
@@ -106,15 +106,17 @@ public class AccessTokenController extends BaseController<AccessToken> {
             return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
         }
 
-        User user = accessToken.getUser();
-        List<Profile> profiles = user.getProfiles();
-        for (Profile profile : profiles) {
-            List<Permission> permissions = profile.getPermission();
-            for (Permission p : permissions) {
-                if (p.getResource().getName().equals(resource)) {
-                    if (p.getPermission().contains(permission)) {
-                        responseData.put("message", "Authorized");
-                        return Response.status(Response.Status.OK).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+        if (accessToken != null) {
+            User user = accessToken.getUser();
+            List<Profile> profiles = user.getProfiles();
+            for (Profile profile : profiles) {
+                List<Permission> permissions = profile.getPermission();
+                for (Permission p : permissions) {
+                    if (p.getResource().getName().equals(resource)) {
+                        if (p.getPermission().contains(permission)) {
+                            responseData.put("message", "Authorized");
+                            return Response.status(Response.Status.OK).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+                        }
                     }
                 }
             }

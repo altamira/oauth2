@@ -108,8 +108,8 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
 
         if (resource == null) {
             HashMap<String, String> message = new HashMap<>();
-            map.put("message", "Specify resource name");
-            Response response = Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
+            message.put("message", "Specify resource name");
+            Response response = Response.status(Response.Status.UNAUTHORIZED).entity(message).type(MediaType.APPLICATION_JSON).build();
             return response;
         }
 
