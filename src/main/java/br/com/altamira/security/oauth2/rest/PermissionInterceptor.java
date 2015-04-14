@@ -30,11 +30,6 @@ public class PermissionInterceptor implements ContainerRequestFilter {
     /**
      *
      */
-    private static final String AUTH_URL = "http://localhost:8080/security-oauth2-0.2.0-SNAPSHOT/authz/permission";
-
-    /**
-     *
-     */
     private static final String PERMISSION_GET = "READ";
 
     /**
