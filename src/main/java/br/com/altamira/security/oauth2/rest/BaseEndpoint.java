@@ -15,9 +15,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -92,49 +89,6 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
      */
     protected Class<? extends BaseEndpoint<T>> type;
 
-    protected Response getCORSHeaders(String origin) {
-        return Response
-                .ok()
-                .header("Access-Control-Allow-Origin", origin)
-                .header("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Origin, Content-Type, Content-Length, Accept, Authorization, X-Requested-With")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600").build();
-    }
-
-    /**
-     *
-     * @param origin
-     * @return
-     */
-    @OPTIONS
-    public Response corsPreflight(@HeaderParam("Origin") String origin) {
-        return getCORSHeaders(origin);
-    }
-
-    @OPTIONS
-    @Path("/{id:[0-9]*}")
-    public Response corsPreflightForIdPath(@HeaderParam("Origin") String origin) {
-        return getCORSHeaders(origin);
-    }
-
-    @OPTIONS
-    @Path("/search")
-    public Response corsPreflightForSearchPath(@HeaderParam("Origin") String origin) {
-        return getCORSHeaders(origin);
-    }
-
-    /**
-     *
-     * @param origin
-     * @return
-     */
-    @OPTIONS
-    @Path("{key:[a-zA-Z0-9]*}")
-    public Response corsPreflightPath(@HeaderParam("Origin") String origin) {
-        return getCORSHeaders(origin);
-    }
-
     /**
      *
      * @param entity
@@ -165,13 +119,6 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
 
         responseBuilder.entity(mapper.writeValueAsString(entity));
 
-        if (headers.getHeaderString("Origin") != null
-                && !headers.getHeaderString("Origin").isEmpty()) {
-            responseBuilder.header("Access-Control-Allow-Origin",
-                    headers.getRequestHeader("Origin").get(0)).header(
-                            "Access-Control-Allow-Credentials", "true");
-        }
-
         return responseBuilder;
     }
 
@@ -198,13 +145,6 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
                 //                .path(String.valueOf(entity.getId())).build())
                 .entity(mapper.writeValueAsString(entity));
 
-        if (headers.getHeaderString("Origin") != null
-                && !headers.getHeaderString("Origin").isEmpty()) {
-            responseBuilder.header("Access-Control-Allow-Origin",
-                    headers.getRequestHeader("Origin").get(0)).header(
-                            "Access-Control-Allow-Credentials", "true");
-        }
-
         return responseBuilder;
     }
 
@@ -216,13 +156,6 @@ public abstract class BaseEndpoint<T extends Entity> /* implements Endpoint<T> *
             throws JsonProcessingException {
 
         ResponseBuilder responseBuilder = Response.noContent();
-
-        if (headers.getHeaderString("Origin") != null
-                && !headers.getHeaderString("Origin").isEmpty()) {
-            responseBuilder.header("Access-Control-Allow-Origin",
-                    headers.getRequestHeader("Origin").get(0)).header(
-                            "Access-Control-Allow-Credentials", "true");
-        }
 
         return responseBuilder;
     }

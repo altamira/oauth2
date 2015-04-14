@@ -46,8 +46,8 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
         this.type = AuthzEndpoint.class;
     }
 
-    @Path("token")
     @GET
+    @Path("token")
     @Produces(MediaType.APPLICATION_JSON)
     public Response authorize(
             @Context HttpServletRequest request,
@@ -79,8 +79,8 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
         return createOkResponse(responseData).build();
     }
 
-    @Path("permission")
     @GET
+    @Path("permission")
     @Produces(MediaType.APPLICATION_JSON)
     public Response authorizeRights(
             @Context HttpServletRequest request,
@@ -93,8 +93,8 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
     }
 
     //ALTAMIRA-182: Data API - add validation token for each request in RESTful Data API
-    @Path("permission")
     @POST
+    @Path("permission")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response authorizeRights(
@@ -107,7 +107,9 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
         String resource = map.get("resource");
 
         if (resource == null) {
-            Response response = Response.status(Response.Status.UNAUTHORIZED).entity("Specify resource name").build();
+            HashMap<String, String> message = new HashMap<>();
+            map.put("message", "Specify resource name");
+            Response response = Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
             return response;
         }
 

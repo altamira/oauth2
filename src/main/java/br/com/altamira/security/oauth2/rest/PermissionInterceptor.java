@@ -1,12 +1,10 @@
 package br.com.altamira.security.oauth2.rest;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
-import br.com.altamira.security.oauth2.model.AccessToken;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import javax.ejb.EJB;
-import javax.inject.Inject;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -98,7 +96,7 @@ public class PermissionInterceptor implements ContainerRequestFilter {
             resource.append(resourceInfo.getResourceClass().getName());
         }
 
-        if (resource.toString().equals("AUTHZ")) {
+        if (resource.toString().equals("AUTHZ") || resource.toString().equals("TOKEN")) {
             return;
         }
         
