@@ -23,7 +23,7 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
-import br.com.altamira.security.oauth2.model.AccessToken;
+import br.com.altamira.data.model.security.AccessToken;
 
 /**
  *

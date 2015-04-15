@@ -41,7 +41,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.altamira.security.oauth2.data.MemberRepository;
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 import br.com.altamira.security.oauth2.service.MemberRegistration;
 
 /**

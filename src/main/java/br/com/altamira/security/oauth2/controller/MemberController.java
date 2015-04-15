@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 import br.com.altamira.security.oauth2.service.MemberRegistration;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an

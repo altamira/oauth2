@@ -27,7 +27,7 @@ import javax.ws.rs.core.UriBuilderException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.UserController;
-import br.com.altamira.security.oauth2.model.User;
+import br.com.altamira.data.model.security.User;
 import java.util.Map;
 import javax.ejb.EJBException;
 import javax.persistence.NoResultException;

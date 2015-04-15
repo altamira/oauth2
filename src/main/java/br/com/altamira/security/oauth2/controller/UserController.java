@@ -23,8 +23,8 @@ import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import br.com.altamira.security.oauth2.model.User;
-import br.com.altamira.security.oauth2.model.User_;
+import br.com.altamira.data.model.security.User;
+import br.com.altamira.data.model.security.User_;
 import br.com.altamira.security.oauth2.util.Common;
 import java.util.Map;
 

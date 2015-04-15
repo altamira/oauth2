@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 import br.com.altamira.security.oauth2.service.MemberRegistration;
 import br.com.altamira.security.oauth2.util.Resources;
 import org.jboss.shrinkwrap.api.Archive;

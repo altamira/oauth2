@@ -17,10 +17,11 @@ import javax.validation.Validator;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.altamira.security.oauth2.model.AccessToken;
-import br.com.altamira.security.oauth2.model.Permission;
-import br.com.altamira.security.oauth2.model.Profile;
-import br.com.altamira.security.oauth2.model.User;
+import br.com.altamira.data.model.security.AccessToken;
+import br.com.altamira.data.model.security.Permission;
+import br.com.altamira.data.model.security.Profile;
+import br.com.altamira.data.model.security.User;
+
 
 @Stateless
 public class AccessTokenController extends BaseController<AccessToken> {

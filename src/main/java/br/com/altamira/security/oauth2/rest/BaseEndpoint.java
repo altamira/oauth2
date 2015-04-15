@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 
-import br.com.altamira.security.oauth2.model.Entity;
+import br.com.altamira.data.model.Entity;
 import br.com.altamira.security.oauth2.util.NullValueSerializer;
 
 /**

@@ -24,7 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 
 @ApplicationScoped
 public class MemberRepository {

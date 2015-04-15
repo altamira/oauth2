@@ -24,7 +24,7 @@ import javax.ws.rs.core.UriBuilderException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.ProfileController;
-import br.com.altamira.security.oauth2.model.Profile;
+import br.com.altamira.data.model.security.Profile;
 
 /**
  *

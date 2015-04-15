@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 
 @RequestScoped
 public class MemberListProducer {

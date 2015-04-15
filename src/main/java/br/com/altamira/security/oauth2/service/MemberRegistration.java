@@ -16,7 +16,7 @@
  */
 package br.com.altamira.security.oauth2.service;
 
-import br.com.altamira.security.oauth2.model.Member;
+import br.com.altamira.data.model.security.Member;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;

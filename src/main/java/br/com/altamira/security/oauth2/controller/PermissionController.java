@@ -15,7 +15,7 @@ import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import br.com.altamira.security.oauth2.model.Permission;
+import br.com.altamira.data.model.security.Permission;
 
 @Stateless
 public class PermissionController extends BaseController<Permission> {

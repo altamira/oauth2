@@ -7,12 +7,12 @@
          can find it in the source at src/main/webapp/WEB-INF/0auth2-ds.xml -->
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:jboss/datasources/oracle-se1-data-0-9-0</jta-data-source>
-    <class>br.com.altamira.security.oauth2.model.AccessToken</class>
-    <class>br.com.altamira.security.oauth2.model.Member</class>
-    <class>br.com.altamira.security.oauth2.model.Permission</class>
-    <class>br.com.altamira.security.oauth2.model.Profile</class>
-    <class>br.com.altamira.security.oauth2.model.User</class>
-    <class>br.com.altamira.security.oauth2.model.Resource</class>
+    <class>br.com.altamira.data.model.security.AccessToken</class>
+    <class>br.com.altamira.data.model.security.Member</class>
+    <class>br.com.altamira.data.model.security.Permission</class>
+    <class>br.com.altamira.data.model.security.Profile</class>
+    <class>br.com.altamira.data.model.security.User</class>
+    <class>br.com.altamira.data.model.security.Resource</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->

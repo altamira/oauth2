@@ -24,7 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
 import br.com.altamira.security.oauth2.controller.UserController;
-import br.com.altamira.security.oauth2.model.User;
+import br.com.altamira.data.model.security.User;
 
 /**
  *
