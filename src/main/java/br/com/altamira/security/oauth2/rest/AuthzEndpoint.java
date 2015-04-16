@@ -24,6 +24,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.altamira.security.oauth2.controller.AccessTokenController;
 import br.com.altamira.data.model.security.AccessToken;
+import javax.ejb.EJBException;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -60,10 +62,14 @@ public class AuthzEndpoint extends BaseEndpoint<AccessToken> {
 
         try {
             accessToken = accessTokenController.findByToken(token);
+        } catch (EJBException e) {
+            if (e.getCause() instanceof NoResultException) {
+                responseData.put("message", "Invalid Token: " + token);
+                return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseData).type(MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
-            e.printStackTrace();
-            responseData.put("message", "Invalid Token: " + token);
-            return Response.status(Response.Status.UNAUTHORIZED).entity(responseData).type(MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseData).type(MediaType.APPLICATION_JSON).build();
         }
 
         // Put elements to the map
